@@ -1,5 +1,6 @@
 package ar.com.chepps.Companny.container;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 public class ProductoDTODetalle {
@@ -8,6 +9,7 @@ public class ProductoDTODetalle {
     private LocalDateTime tiempo_estimado;
     private Double precio;
     private double cantidadProducto;
+    private BigDecimal costo;
 
     public ProductoDTODetalle(String nombre, LocalDateTime tiempo_estimado, Double precio) {
         this.nombre = nombre;
@@ -45,5 +47,13 @@ public class ProductoDTODetalle {
 
     public void setCantidadProducto(double cantidadProducto) {
         this.cantidadProducto = cantidadProducto;
+    }
+
+    public BigDecimal getCosto() {
+        return costo;
+    }
+
+    public void setCosto(BigDecimal costo) {
+        this.costo = costo;
     }
 }

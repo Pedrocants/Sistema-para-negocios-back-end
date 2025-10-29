@@ -3,6 +3,7 @@ package ar.com.chepps.Companny.entity;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Entity
@@ -24,6 +25,8 @@ public class Insumo {
     private String denominacion;
     private Boolean esParaElaborar;
     private Boolean eliminado;
+    private BigDecimal costo = BigDecimal.valueOf(0);
+
     @ManyToOne
     @JoinColumn(name = "idMarca",
             referencedColumnName = "idMarca")
@@ -118,5 +121,13 @@ public class Insumo {
                 ", eliminado=" + eliminado +
                 ", marca=" + marca.toString() +
                 '}';
+    }
+
+    public BigDecimal getCosto() {
+        return costo;
+    }
+
+    public void setCosto(BigDecimal costo) {
+        this.costo = costo;
     }
 }

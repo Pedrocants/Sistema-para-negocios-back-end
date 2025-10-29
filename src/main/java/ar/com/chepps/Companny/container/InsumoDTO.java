@@ -3,6 +3,8 @@ package ar.com.chepps.Companny.container;
 import ar.com.chepps.Companny.entity.ProductoDetalle;
 import ar.com.chepps.Companny.entity.UnidadMedida;
 
+import java.math.BigDecimal;
+
 public class InsumoDTO {
     private Long idInsumo;
     private UnidadMedida unidadMedida;
@@ -12,6 +14,7 @@ public class InsumoDTO {
     private Boolean esParaElaborar;
     private Boolean eliminado;
     private MarcaDTO marca;
+    private BigDecimal costo;
 
     public InsumoDTO() {
     }
@@ -87,6 +90,14 @@ public class InsumoDTO {
 
     public void setMarca(MarcaDTO marca) {
         this.marca = marca;
+    }
+
+    public BigDecimal getCosto() {
+        return costo;
+    }
+
+    public void setCosto(BigDecimal costo) {
+        this.costo = costo;
     }
 
     @Override

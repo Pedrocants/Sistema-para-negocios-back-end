@@ -115,6 +115,9 @@ public class HelperDTO {
                             det.getInsumo().getPrecio()
                     );
                     dtoProductoDetalle.setCantidadProducto(det.getCantidadInsumo());
+                    if (det.getInsumo().getCosto() != null) {
+                        dtoProductoDetalle.setCosto(det.getInsumo().getCosto());
+                    }
                     productosParaMostrar.add(dtoProductoDetalle);
                 }
             }
@@ -139,6 +142,9 @@ public class HelperDTO {
                 );
                 dto.setMarca(mdto);
             }
+            if (i.getCosto() != null) {
+                dto.setCosto(i.getCosto());
+            }
             return dto;
 
         }
@@ -159,6 +165,9 @@ public class HelperDTO {
             marca.setInsumos((dto.getMarca().getInsumos() != null) ? dto.getMarca().getInsumos() :
                     null);
             i.setMarca(marca);
+        }
+        if (dto.getCosto() != null) {
+            i.setCosto(dto.getCosto());
         }
         return i;
     }
@@ -231,6 +240,9 @@ public class HelperDTO {
                     insumoDTO.setMarca(new MarcaDTO(i.getMarca().getIdMarca(),
                             i.getMarca().getNombre(), null));
                 }
+                if (i.getCosto() != null) {
+                    insumoDTO.setCosto(i.getCosto());
+                }
                 insumosDTO.add(insumoDTO);
             }
             dto.setInsumos(insumosDTO);
@@ -257,6 +269,9 @@ public class HelperDTO {
                 insumo.setDetalle(idto.getDetalle());
                 insumo.setIdInsumo(idto.getIdInsumo());
                 insumo.setUnidadMedida(idto.getUnidadMedida());
+                if (idto.getCosto() != null) {
+                    insumo.setCosto(idto.getCosto());
+                }
                 insumos.add(insumo);
             }
             mnf.setInsumos(insumos);

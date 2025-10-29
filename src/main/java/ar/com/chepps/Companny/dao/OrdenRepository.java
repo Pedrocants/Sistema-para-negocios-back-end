@@ -30,13 +30,16 @@ public interface OrdenRepository extends JpaRepository<Orden, Long> {
     @Query("SELECT SUM(CASE WHEN o.tipoOrden = 'VENTA' THEN o.total ELSE 0 END) - " +
             "SUM(CASE WHEN o.tipoOrden = 'COMPRA' THEN o.total ELSE 0 END) - " +
             "SUM(CASE WHEN o.tipoOrden = 'PAGO' THEN o.total ELSE 0 END) " +
-            "FROM Orden o WHERE o.estado != Estados.cancelada")
+            "FROM Orden o WHERE o.estado != Estados.cancelada AND o.tipoOrden != TipoOrden" +
+            ".AGREGACION_DE_STOCK AND tipoOrden != TipoOrden.DEVOLUCION_O_ELIMINACION_DE_STOCK")
     public Double calcularBalance();
 
     @Query("SELECT SUM(o.pagado) FROM Orden o WHERE o.estado != Estados.cancelada")
     public Double sumaPagosDeOrdenes();
 
-    @Query("SELECT SUM(o.pagado) FROM Orden o WHERE o.fecha_carga >= :fecha_carga AND o.estado != Estados.cancelada")
+    @Query("SELECT SUM(o.pagado) FROM Orden o WHERE o.fecha_carga >= :fecha_carga AND o.estado !=" +
+            " Estados.cancelada AND o.tipoOrden != TipoOrden.DEVOLUCION_O_ELIMINACION_DE_STOCK " +
+            "AND o.tipoOrden != AGREGACION_DE_STOCK")
     public Double sumaPagosDeOrdenesPorFecha(@Param("fecha_carga") LocalDateTime fecha_carga);
 
     @Query("SELECT SUM(CASE WHEN o.tipoOrden = TipoOrden.VENTA THEN o.pagado ELSE 0 END) - SUM" +
