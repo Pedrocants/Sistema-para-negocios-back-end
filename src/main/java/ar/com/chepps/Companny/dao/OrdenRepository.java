@@ -77,28 +77,30 @@ public interface OrdenRepository extends JpaRepository<Orden, Long> {
 
     @Transactional
     @Query("SELECT new ar.com.chepps.Companny.container.ReportesVentasProductos(" +
-            "o.idOrden, p.denominacion, SUM(od.cantidadProducto)) " +
+            "p.idProductoManufacturado, p.denominacion, d.stockActual, SUM(od.cantidadProducto))" +
+            " " +
             "FROM ar.com.chepps.Companny.entity.OrdenDetalle od " +
             "JOIN od.orden o " +
             "JOIN od.productos p " +
+            "JOIN p.detalle d " +
             "WHERE o.tipoOrden = 'VENTA' " +
             "AND o.fecha_carga BETWEEN :desde AND :hasta " +
-            "GROUP BY o.idOrden, p.denominacion")
+            "GROUP BY p.idProductoManufacturado, p.denominacion, d.stockActual")
     List<ReportesVentasProductos> obtenerReporteVentasProductosPorFechas(
             @Param("desde") LocalDateTime desde,
             @Param("hasta") LocalDateTime hasta);
 
     @Transactional
     @Query("SELECT new ar.com.chepps.Companny.container.ReportesVentasProductos(" +
-            "o.idOrden, p.denominacion, SUM(od.cantidadInsumo)) " +
+            "p.idInsumo, p.denominacion, d.stockActual, SUM(od.cantidadInsumo)) " +
             "FROM ar.com.chepps.Companny.entity.OrdenDetalle od " +
             "JOIN od.orden o " +
             "JOIN od.insumo p " +
-            "WHERE o.tipoOrden = :estado " +
+            "JOIN p.detalle d " +
+            "WHERE o.tipoOrden = 'VENTA' " +
             "AND o.fecha_carga BETWEEN :desde AND :hasta " +
-            "GROUP BY o.idOrden, p.denominacion")
+            "GROUP BY p.idInsumo, p.denominacion, d.stockActual")
     List<ReportesVentasProductos> obtenerReporteVentasProductos_InsumosPorFechas(
             @Param("desde") LocalDateTime desde,
-            @Param("hasta") LocalDateTime hasta,
-            @Param("estado") String estado);
+            @Param("hasta") LocalDateTime hasta);
 }

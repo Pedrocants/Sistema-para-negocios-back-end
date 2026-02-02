@@ -206,7 +206,7 @@ public class ExcelReportService implements IExcelReportService {
         dataStyle.setBorderRight(BorderStyle.THIN);
 
         Row headerRow = sheet.createRow(0);
-        String[] encabezados = {"N° ORDEN", "Nombre", "Cantidad vendidas"};
+        String[] encabezados = {"N° PRODUCTO", "Nombre", "Stock actual", "Cantidad vendidas"};
 
         for (int i = 0; i < encabezados.length; i++) {
             Cell cell = headerRow.createCell(i);
@@ -226,7 +226,11 @@ public class ExcelReportService implements IExcelReportService {
             denominacionCell.setCellValue(r.getDenominacion());
             denominacionCell.setCellStyle(productNameStyle);
 
-            Cell cantidadVendidasCell = row.createCell(2);
+            Cell stockCell = row.createCell(2);
+            stockCell.setCellValue(r.getStock());
+            stockCell.setCellStyle(productNameStyle);
+
+            Cell cantidadVendidasCell = row.createCell(3);
             cantidadVendidasCell.setCellValue(r.getCantidadVendidas());
             cantidadVendidasCell.setCellStyle(numberStyle);
 
@@ -246,4 +250,3 @@ public class ExcelReportService implements IExcelReportService {
         outputStream.close();
     }
 }
-

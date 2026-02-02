@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class OrdenServiceImp implements IOrdenService {
@@ -217,7 +218,12 @@ public class OrdenServiceImp implements IOrdenService {
 
     public List<ReportesVentasProductos> getReporteVentas(LocalDateTime desde,
                                                           LocalDateTime hasta) {
-        return repo.obtenerReporteVentasProductosPorFechas(desde, hasta);
+        List<ReportesVentasProductos> p = repo.obtenerReporteVentasProductosPorFechas(desde, hasta);
+        List<ReportesVentasProductos> i =
+                repo.obtenerReporteVentasProductos_InsumosPorFechas(desde, hasta);
+        List<ReportesVentasProductos> lista = Stream.concat(p.stream(), i.stream()).toList();
+
+        return lista;
     }
 
 }
