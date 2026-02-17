@@ -22,4 +22,5 @@ public interface IOrdenService {
     public SumaOrdenesDTO sumarOrdenesPorFecha(LocalDateTime fecha_carga) throws NullPointerException;
 
     public List<ReportesVentasProductos> getReporteVentas(LocalDateTime desde, LocalDateTime hasta);
+    OrdenClienteProjection obtenerDatosPorCliente(Long idCliente);
 }

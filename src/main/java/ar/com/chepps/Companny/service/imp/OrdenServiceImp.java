@@ -1,15 +1,13 @@
 package ar.com.chepps.Companny.service.imp;
 
 import ar.com.chepps.Companny.container.*;
-import ar.com.chepps.Companny.dao.ClienteRepository;
-import ar.com.chepps.Companny.dao.InsumoRepository;
-import ar.com.chepps.Companny.dao.OrdenRepository;
-import ar.com.chepps.Companny.dao.ProductoManufacturadoRepository;
+import ar.com.chepps.Companny.dao.*;
 import ar.com.chepps.Companny.entity.*;
 import ar.com.chepps.Companny.enums.Estados;
 import ar.com.chepps.Companny.enums.TipoOrden;
 import ar.com.chepps.Companny.helpers.HelperDTO;
 import ar.com.chepps.Companny.service.IOrdenService;
+import ar.com.chepps.Companny.service.OrdenClienteProjection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -34,6 +32,10 @@ public class OrdenServiceImp implements IOrdenService {
     private InsumoRepository insumoRepo;
     @Autowired
     private ClienteRepository clienteRepo;
+    @Autowired
+    private ContactoRepository repoCon;
+    @Autowired
+    private DomicilioRepository repoDom;
 
 
     @Transactional(rollbackFor = Exception.class)
@@ -55,6 +57,18 @@ public class OrdenServiceImp implements IOrdenService {
             Cliente cliente = (o.getCliente().getIdCliente() == null) ?
                     clienteRepo.save(o.getCliente()) : o.getCliente();
             o.setCliente(cliente);
+        }
+        if (o.getContacto() != null) {
+            Contacto contacto = (o.getContacto().getIdContacto() == null) ?
+                    repoCon.save(o.getContacto()) :
+                    repoCon.findById(o.getContacto().getIdContacto()).orElse(null);
+            o.setContacto(contacto);
+        }
+        if (o.getDomicilio() != null) {
+            Domicilio d = (o.getDomicilio().getIdDomicilio() == null) ?
+                    repoDom.save(o.getDomicilio()) :
+                    repoDom.findById(o.getDomicilio().getIdDomicilio()).orElse(null);
+            o.setDomicilio(d);
         }
         Orden ordenGuardada = repo.save(o);
         if (!update) {
@@ -225,5 +239,11 @@ public class OrdenServiceImp implements IOrdenService {
 
         return lista;
     }
-
+    @Override
+    public OrdenClienteProjection obtenerDatosPorCliente(Long idCliente) {
+        return repo.findDatosCliente(idCliente, PageRequest.of(0, 1))
+                .stream()
+                .findFirst()
+                .orElse(null);
+    }
 }

@@ -2,6 +2,7 @@ package ar.com.chepps.Companny.dao;
 
 import ar.com.chepps.Companny.container.ReportesVentasProductos;
 import ar.com.chepps.Companny.entity.Orden;
+import ar.com.chepps.Companny.service.OrdenClienteProjection;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -103,4 +104,17 @@ public interface OrdenRepository extends JpaRepository<Orden, Long> {
     List<ReportesVentasProductos> obtenerReporteVentasProductos_InsumosPorFechas(
             @Param("desde") LocalDateTime desde,
             @Param("hasta") LocalDateTime hasta);
+
+    @Query("""
+    SELECT 
+        o.contacto.idContacto AS idContacto,
+        o.domicilio.idDomicilio AS idDomicilio
+    FROM Orden o
+    WHERE o.cliente.idCliente = :idCliente
+    ORDER BY o.idOrden DESC
+""")
+    List<OrdenClienteProjection> findDatosCliente(
+            @Param("idCliente") Long idCliente,
+            Pageable pageable
+    );
 }

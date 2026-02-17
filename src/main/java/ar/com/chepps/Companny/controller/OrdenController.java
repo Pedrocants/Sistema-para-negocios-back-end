@@ -5,6 +5,7 @@ import ar.com.chepps.Companny.container.OrdenDetalleDTO;
 import ar.com.chepps.Companny.container.PaginacionDTO;
 import ar.com.chepps.Companny.container.SumaOrdenesDTO;
 import ar.com.chepps.Companny.service.IOrdenService;
+import ar.com.chepps.Companny.service.OrdenClienteProjection;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -81,5 +82,10 @@ public class OrdenController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al " +
                     "eliminar la orden.");
         }
+    }
+
+    @GetMapping("/orden/cliente/{idCliente}")
+    public OrdenClienteProjection obtenerDatosCliente(@PathVariable Long idCliente) {
+        return srv.obtenerDatosPorCliente(idCliente);
     }
 }
