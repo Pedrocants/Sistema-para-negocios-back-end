@@ -6,6 +6,7 @@ import ar.com.chepps.Companny.entity.*;
 import ar.com.chepps.Companny.enums.Estados;
 import ar.com.chepps.Companny.enums.TipoOrden;
 import ar.com.chepps.Companny.helpers.HelperDTO;
+import ar.com.chepps.Companny.helpers.formateoDecimales;
 import ar.com.chepps.Companny.service.IOrdenService;
 import ar.com.chepps.Companny.service.OrdenClienteProjection;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -152,12 +153,12 @@ public class OrdenServiceImp implements IOrdenService {
 
 
                 if (prdDetalle.getStockActual() >= d.getCantidadProducto() && !esCompra) {
-                    prdDetalle.setStockActual((prdDetalle.getStockActual() - d.getCantidadProducto()));
+                    prdDetalle.setStockActual(formateoDecimales.formatearDecimal(prdDetalle.getStockActual() - d.getCantidadProducto(), 3));
                     prd.setDetalle(prdDetalle);
 
                     prdRepo.save(prd);
                 } else if (esCompra && d.getCantidadProducto() > 0) {
-                    prdDetalle.setStockActual((prdDetalle.getStockActual() + d.getCantidadProducto()));
+                    prdDetalle.setStockActual(formateoDecimales.formatearDecimal(prdDetalle.getStockActual() + d.getCantidadProducto(), 3));
                     prd.setDetalle(prdDetalle);
                     if (!prd.getInsumos().isEmpty()) {
                         modificarStockInsumos(prd, d.getCantidadProducto());
@@ -172,14 +173,15 @@ public class OrdenServiceImp implements IOrdenService {
                 Insumo i = insumoRepo.findById(d.getInsumo().getIdInsumo()).orElse(null);
                 if (!Objects.isNull(i) && i.getDetalle().getStockActual() >= d.getCantidadInsumo() && !esCompra) {
                     ProductoDetalle insumoD = i.getDetalle();
-                    insumoD.setStockActual(insumoD.getStockActual() - d.getCantidadInsumo());
+                    insumoD.setStockActual(formateoDecimales.formatearDecimal(insumoD.getStockActual() - d.getCantidadInsumo(), 3));
                     i.setDetalle(insumoD);
                     insumoRepo.save(i);
                     i = null;
                     insumoD = null;
                 } else if (esCompra && i.getDetalle().getStockActual() >= d.getCantidadInsumo() || esCompra && i.getDetalle().getStockActual() <= d.getCantidadInsumo()) {
                     ProductoDetalle insumoD = i.getDetalle();
-                    insumoD.setStockActual(insumoD.getStockActual() + d.getCantidadInsumo());
+                    insumoD.setStockActual(formateoDecimales.formatearDecimal(insumoD.getStockActual() + d.getCantidadInsumo(),
+                            3));
                     i.setDetalle(insumoD);
                     insumoRepo.save(i);
                     i = null;
@@ -200,7 +202,7 @@ public class OrdenServiceImp implements IOrdenService {
                     if (historial.getInsumo().equals(i) && historial.getInsumo().getIdInsumo() == i.getIdInsumo()) {
                         cantInsumo = (historial.getCantidad() * cantidad);
                         d = i.getDetalle();
-                        d.setStockActual((d.getStockActual() - cantInsumo));
+                        d.setStockActual(formateoDecimales.formatearDecimal(d.getStockActual() - cantInsumo, 3));
                         i.setDetalle(d);
                         insumoRepo.save(i);
                     }
