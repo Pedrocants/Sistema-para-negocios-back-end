@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public class OrdenDetalleDTO {
-    //DTO de orden para mostrar
+
     private Long idOrden;
     private String cliente;
     private Contacto contacto;
@@ -20,6 +20,13 @@ public class OrdenDetalleDTO {
     private List<ProductoDTODetalle> productos;
 
     public OrdenDetalleDTO() {
+    }
+
+    public OrdenDetalleDTO(Long idOrden, String cliente, Double total, Estados estado) {
+        this.idOrden = idOrden;
+        this.cliente = cliente;
+        this.total = (double) total;
+        this.estado = estado;
     }
 
     public OrdenDetalleDTO(Long idOrden, String cliente, Contacto contacto, Domicilio domicilio, LocalDateTime fecha_carga, LocalDateTime fecha_entrega, double subTotal, double total, Estados estado, double pagado) {

@@ -1,5 +1,6 @@
 package ar.com.chepps.Companny.dao;
 
+import ar.com.chepps.Companny.container.OrdenDetalleDTO;
 import ar.com.chepps.Companny.container.ReportesVentasProductos;
 import ar.com.chepps.Companny.entity.Orden;
 import ar.com.chepps.Companny.service.OrdenClienteProjection;
@@ -68,6 +69,22 @@ public interface OrdenRepository extends JpaRepository<Orden, Long> {
     @Transactional
     @Query("SELECT o FROM Orden o WHERE o.estado != Estados.cancelada ORDER BY o.idOrden DESC")
     Page<Orden> findAll(Pageable pageable);
+
+    @Query("""
+    SELECT new ar.com.chepps.Companny.container.OrdenDetalleDTO(
+        o.idOrden,
+        CONCAT(c.nombre, ' ', c.apellido),
+        o.total,
+        o.estado
+    )
+    FROM Orden o
+    LEFT JOIN o.cliente c
+    WHERE o.estado != ar.com.chepps.Companny.enums.Estados.cancelada
+    AND o.tipoOrden != ar.com.chepps.Companny.enums.TipoOrden.AGREGACION_DE_STOCK
+    AND o.tipoOrden != ar.com.chepps.Companny.enums.TipoOrden.DEVOLUCION_O_ELIMINACION_DE_STOCK
+    ORDER BY o.idOrden DESC
+""")
+    Page<OrdenDetalleDTO> findAllResumen(Pageable pageable);
 
     @Transactional
     @Query("SELECT SUM(CASE WHEN o.tipoOrden = 'VENTA' THEN o.total ELSE 0 END) - " +

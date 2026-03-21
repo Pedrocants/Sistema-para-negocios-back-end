@@ -87,9 +87,18 @@ public class OrdenServiceImp implements IOrdenService {
     public PaginacionDTO<OrdenDetalleDTO> mostrarOrdenes(LocalDateTime fecha_carga,
                                                          int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
-        Page<Orden> ordenesPage = (fecha_carga == null)
-                ? repo.findAll(pageable)
-                : repo.buscarDesdeUnaFecha(fecha_carga, pageable);
+        if (fecha_carga == null) {
+            Page<OrdenDetalleDTO> ordenesPage = repo.findAllResumen(pageable);
+            List<OrdenDetalleDTO> ordenesDTO = ordenesPage.getContent();
+            return new PaginacionDTO<>(
+                    ordenesDTO,
+                    ordenesPage.getNumber(),
+                    ordenesPage.getTotalPages(),
+                    ordenesPage.getTotalElements(),
+                    ordenesPage.getSize()
+            );
+        }
+        Page<Orden> ordenesPage = repo.buscarDesdeUnaFecha(fecha_carga, pageable);
 
         List<OrdenDetalleDTO> ordenesDTO = ordenesPage
                 .getContent()

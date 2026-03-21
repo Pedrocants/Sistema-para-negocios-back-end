@@ -189,7 +189,7 @@ public class ExcelReportService implements IExcelReportService {
         productNameStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
 
         XSSFCellStyle numberStyle = workbook.createCellStyle();
-        numberStyle.setDataFormat(workbook.createDataFormat().getFormat("#,##0"));
+        numberStyle.setDataFormat(workbook.createDataFormat().getFormat("#,##0.####"));
         numberStyle.setBorderBottom(BorderStyle.THIN);
         numberStyle.setBorderTop(BorderStyle.THIN);
         numberStyle.setBorderLeft(BorderStyle.THIN);
