@@ -40,7 +40,9 @@ public class OrdenController {
                     .toUri();
         } catch (IllegalArgumentException ex) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(ex.getMessage());
+                    .body("Error puede que no hayas cargado correctamente un campo, o stock " +
+                            "insuficiente" +
+                            ".");
         }
         return ResponseEntity.created(location).body(oddto);
     }
