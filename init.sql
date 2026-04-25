@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 8.0.41, for Linux (x86_64)
+-- MySQL dump 10.13  Distrib 8.0.45, for Linux (x86_64)
 --
 -- Host: localhost    Database: BD_Chepps
 -- ------------------------------------------------------
--- Server version	8.0.41-0ubuntu0.22.04.1
+-- Server version	8.0.45-0ubuntu0.22.04.1
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -29,7 +29,7 @@ CREATE TABLE `Cliente` (
   `tipoCliente` varchar(255) DEFAULT 'minorista',
   `eliminado` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`idCliente`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -44,7 +44,7 @@ CREATE TABLE `Contacto` (
   `telefono` varchar(255) NOT NULL,
   `email` varchar(255) NOT NULL DEFAULT 'sin email',
   PRIMARY KEY (`idContacto`)
-) ENGINE=InnoDB AUTO_INCREMENT=65 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=83 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -59,7 +59,7 @@ CREATE TABLE `Domicilio` (
   `direccion` text NOT NULL,
   `provincia` varchar(255) NOT NULL,
   PRIMARY KEY (`idDomicilio`)
-) ENGINE=InnoDB AUTO_INCREMENT=65 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=83 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -82,7 +82,7 @@ CREATE TABLE `Historial` (
   CONSTRAINT `fk_historial_producto_manufacturado` FOREIGN KEY (`idProductoManufacturado`) REFERENCES `ProductoManufacturado` (`idProductoManufacturado`),
   CONSTRAINT `Historial_ibfk_1` FOREIGN KEY (`idProductoManufacturado`) REFERENCES `ProductoManufacturado` (`idProductoManufacturado`),
   CONSTRAINT `Historial_ibfk_2` FOREIGN KEY (`idInsumo`) REFERENCES `Insumo` (`idInsumo`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -101,7 +101,7 @@ CREATE TABLE `Insumo` (
   `esParaElaborar` tinyint(1) NOT NULL,
   `eliminado` tinyint(1) DEFAULT '0',
   `idMarca` int DEFAULT NULL,
-  `costo` decimal DEFAULT NULL,
+  `costo` decimal(10,0) DEFAULT '0',
   PRIMARY KEY (`idInsumo`),
   KEY `idUnidadMedida` (`idUnidadMedida`),
   KEY `idProductoDetalle` (`idProductoDetalle`),
@@ -109,7 +109,7 @@ CREATE TABLE `Insumo` (
   CONSTRAINT `fk_insumo_marca` FOREIGN KEY (`idMarca`) REFERENCES `Marca` (`idMarca`),
   CONSTRAINT `Insumo_ibfk_2` FOREIGN KEY (`idUnidadMedida`) REFERENCES `UnidadMedida` (`idUnidadMedida`),
   CONSTRAINT `Insumo_ibfk_3` FOREIGN KEY (`idProductoDetalle`) REFERENCES `ProductoDetalle` (`idProductoDetalle`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -123,7 +123,7 @@ CREATE TABLE `Marca` (
   `idMarca` int NOT NULL AUTO_INCREMENT,
   `nombre` varchar(50) NOT NULL,
   PRIMARY KEY (`idMarca`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -146,7 +146,7 @@ CREATE TABLE `Orden` (
   `estado` enum('aceptada','pagada','parcial_pendiente','completado','cancelada') NOT NULL DEFAULT 'parcial_pendiente',
   `pagado` double NOT NULL DEFAULT '0',
   `tipoOrden` enum('PAGO','COMPRA','VENTA','AGREGACION_DE_STOCK','DEVOLUCION_O_ELIMINACION_DE_STOCK') DEFAULT NULL,
-  `tipoPago` enum('EFECTIVO','TRANSFERENCIA','VILLETERAS_VIRTUALES','OTRO') NOT NULL DEFAULT 'EFECTIVO',
+  `tipoPago` enum('EFECTIVO','TRANSFERENCIA','VILLETERAS_VIRTUALES','OTROS') DEFAULT NULL,
   PRIMARY KEY (`idOrden`),
   KEY `idCliente` (`idCliente`),
   KEY `idContacto` (`idContacto`),
@@ -156,7 +156,7 @@ CREATE TABLE `Orden` (
   CONSTRAINT `Orden_ibfk_2` FOREIGN KEY (`idContacto`) REFERENCES `Contacto` (`idContacto`),
   CONSTRAINT `Orden_ibfk_3` FOREIGN KEY (`idDomicilio`) REFERENCES `Domicilio` (`idDomicilio`),
   CONSTRAINT `Orden_ibfk_4` FOREIGN KEY (`idUsuario`) REFERENCES `usuario` (`idUsuario`)
-) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=205 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -175,6 +175,8 @@ CREATE TABLE `OrdenDetalle` (
   `observaciones` text,
   `cantidadProducto` double DEFAULT NULL,
   `cantidadInsumo` double DEFAULT NULL,
+  `precioInsumo` decimal(19,4) DEFAULT '0.0000',
+  `precioProducto` decimal(19,4) DEFAULT '0.0000',
   PRIMARY KEY (`idOrdenDetalle`),
   KEY `idOrden` (`idOrden`),
   KEY `idProductoManufacturado` (`idProductoManufacturado`),
@@ -182,7 +184,7 @@ CREATE TABLE `OrdenDetalle` (
   CONSTRAINT `OrdenDetalle_ibfk_1` FOREIGN KEY (`idOrden`) REFERENCES `Orden` (`idOrden`),
   CONSTRAINT `OrdenDetalle_ibfk_2` FOREIGN KEY (`idProductoManufacturado`) REFERENCES `ProductoManufacturado` (`idProductoManufacturado`),
   CONSTRAINT `OrdenDetalle_ibfk_3` FOREIGN KEY (`idProductoInsumo`) REFERENCES `Insumo` (`idInsumo`)
-) ENGINE=InnoDB AUTO_INCREMENT=57 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=268 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -197,7 +199,7 @@ CREATE TABLE `ProductoDetalle` (
   `stockActual` double DEFAULT NULL,
   `stockMinimo` double DEFAULT NULL,
   PRIMARY KEY (`idProductoDetalle`)
-) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=61 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -222,7 +224,7 @@ CREATE TABLE `ProductoManufacturado` (
   KEY `idProductoDetalle` (`idProductoDetalle`),
   CONSTRAINT `ProductoManufacturado_ibfk_1` FOREIGN KEY (`idUnidadMedida`) REFERENCES `UnidadMedida` (`idUnidadMedida`),
   CONSTRAINT `ProductoManufacturado_ibfk_2` FOREIGN KEY (`idProductoDetalle`) REFERENCES `ProductoDetalle` (`idProductoDetalle`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -253,7 +255,7 @@ CREATE TABLE `UnidadMedida` (
   `idUnidadMedida` int NOT NULL AUTO_INCREMENT,
   `denominacion` varchar(255) NOT NULL,
   PRIMARY KEY (`idUnidadMedida`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -269,12 +271,8 @@ CREATE TABLE `usuario` (
   `clave` blob NOT NULL,
   `role` varchar(25) NOT NULL DEFAULT (_utf8mb4'user'),
   PRIMARY KEY (`idUsuario`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping routines for database 'BD_Chepps'
---
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -285,4 +283,4 @@ CREATE TABLE `usuario` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-03-22 17:22:27
+-- Dump completed on 2026-04-14 16:36:50
