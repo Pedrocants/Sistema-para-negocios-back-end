@@ -1,14 +1,16 @@
 package ar.com.chepps.Companny.container;
 
+import java.math.BigDecimal;
+
 public class ReportesVentasProductos {
 
     private Long idProducto;
     private String denominacion;
-    private Double stock;
-    private Double cantidadVendidas;
+    private BigDecimal stock;
+    private BigDecimal cantidadVendidas;
 
-    public ReportesVentasProductos(Long idProducto, String denominacion, Double stock,
-                                   Double cantidadVendidas) {
+    public ReportesVentasProductos(Long idProducto, String denominacion, BigDecimal stock,
+                                   BigDecimal cantidadVendidas) {
         this.idProducto = idProducto;
         this.denominacion = denominacion;
         this.stock = stock;
@@ -31,19 +33,19 @@ public class ReportesVentasProductos {
         this.denominacion = denominacion;
     }
 
-    public Double getStock() {
+    public BigDecimal getStock() {
         return stock;
     }
 
-    public void setStock(Double stock) {
+    public void setStock(BigDecimal stock) {
         this.stock = stock;
     }
 
-    public Double getCantidadVendidas() {
+    public BigDecimal getCantidadVendidas() {
         return cantidadVendidas;
     }
 
-    public void setCantidadVendidas(Double cantidadVendidas) {
+    public void setCantidadVendidas(BigDecimal cantidadVendidas) {
         this.cantidadVendidas = cantidadVendidas;
     }
 }

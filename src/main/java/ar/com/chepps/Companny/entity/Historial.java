@@ -2,6 +2,8 @@ package ar.com.chepps.Companny.entity;
 
 import jakarta.persistence.*;
 
+import java.math.BigDecimal;
+
 @Entity
 @Table (name = "Historial")
 public class Historial {
@@ -16,7 +18,7 @@ public class Historial {
     @JoinColumn (name = "idInsumo",
     referencedColumnName = "idInsumo")
     private Insumo insumo;
-    private double cantidad;
+    private BigDecimal cantidad;
     private String denominacion;
 
     public Historial() {
@@ -34,7 +36,7 @@ public class Historial {
         return insumo;
     }
 
-    public double getCantidad() {
+    public BigDecimal getCantidad() {
         return cantidad;
     }
 
@@ -50,7 +52,7 @@ public class Historial {
         this.insumo = insumo;
     }
 
-    public void setCantidad(double cantidad) {
+    public void setCantidad(BigDecimal cantidad) {
         this.cantidad = cantidad;
     }
 

@@ -6,7 +6,6 @@ import ar.com.chepps.Companny.entity.*;
 import ar.com.chepps.Companny.enums.Estados;
 import ar.com.chepps.Companny.enums.TipoOrden;
 import ar.com.chepps.Companny.helpers.HelperDTO;
-import ar.com.chepps.Companny.helpers.formateoDecimales;
 import ar.com.chepps.Companny.service.IOrdenService;
 import ar.com.chepps.Companny.service.OrdenClienteProjection;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +15,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
@@ -46,7 +46,8 @@ public class OrdenServiceImp implements IOrdenService {
             return new OrdenDetalleDTO();
         }
 
-        or.setEstado(or.getPagado() < or.getTotal() ? Estados.parcial_pendiente : Estados.pagada);
+        or.setEstado(or.getPagado().compareTo(or.getTotal()) < 0 ? Estados.parcial_pendiente :
+                Estados.pagada);
         Orden o = (Orden) HelperDTO.pasarADtoOEntity(or, false);
 
         List<OrdenDetalle> detallesActualizados = o.getDetalle().stream()
@@ -152,13 +153,13 @@ public class OrdenServiceImp implements IOrdenService {
             if (!Objects.isNull(prd)) {
 
 
-                if (prdDetalle.getStockActual() >= d.getCantidadProducto() && !esCompra) {
-                    prdDetalle.setStockActual(formateoDecimales.formatearDecimal(prdDetalle.getStockActual() - d.getCantidadProducto(), 3));
+                if (prdDetalle.getStockActual().compareTo(d.getCantidadProducto()) >= 0 && !esCompra) {
+                    prdDetalle.setStockActual(prdDetalle.getStockActual().subtract(d.getCantidadProducto()));
                     prd.setDetalle(prdDetalle);
 
                     prdRepo.save(prd);
-                } else if (esCompra && d.getCantidadProducto() > 0) {
-                    prdDetalle.setStockActual(formateoDecimales.formatearDecimal(prdDetalle.getStockActual() + d.getCantidadProducto(), 3));
+                } else if (esCompra && d.getCantidadProducto().compareTo(BigDecimal.ZERO) > 0) {
+                    prdDetalle.setStockActual(prdDetalle.getStockActual().add(d.getCantidadProducto()));
                     prd.setDetalle(prdDetalle);
                     if (!prd.getInsumos().isEmpty()) {
                         modificarStockInsumos(prd, d.getCantidadProducto());
@@ -166,22 +167,22 @@ public class OrdenServiceImp implements IOrdenService {
 
                     prdRepo.save(prd);
                 } else {
-                    throw new IllegalArgumentException("La cantidad es mayor al stock actual! Stock: " + prdDetalle.getStockActual() + " cantidad: " + d.getCantidadProducto());
+                    throw new IllegalArgumentException("La cantidad es mayor al stock actual! " +
+                            "Stock: " + prdDetalle.getStockActual() + " cantidad: " + d.getCantidadProducto());
                 }
             }
             if (d.getInsumo() != null) {
                 Insumo i = insumoRepo.findById(d.getInsumo().getIdInsumo()).orElse(null);
-                if (!Objects.isNull(i) && i.getDetalle().getStockActual() >= d.getCantidadInsumo() && !esCompra) {
+                if (!Objects.isNull(i) && i.getDetalle().getStockActual().compareTo(d.getCantidadInsumo()) >= 0 && !esCompra) {
                     ProductoDetalle insumoD = i.getDetalle();
-                    insumoD.setStockActual(formateoDecimales.formatearDecimal(insumoD.getStockActual() - d.getCantidadInsumo(), 3));
+                    insumoD.setStockActual(insumoD.getStockActual().subtract(d.getCantidadInsumo()));
                     i.setDetalle(insumoD);
                     insumoRepo.save(i);
                     i = null;
                     insumoD = null;
-                } else if (esCompra && i.getDetalle().getStockActual() >= d.getCantidadInsumo() || esCompra && i.getDetalle().getStockActual() <= d.getCantidadInsumo()) {
+                } else if (esCompra && i.getDetalle().getStockActual().compareTo(d.getCantidadInsumo()) >= 0 || esCompra && i.getDetalle().getStockActual().compareTo(d.getCantidadInsumo()) <= 0) {
                     ProductoDetalle insumoD = i.getDetalle();
-                    insumoD.setStockActual(formateoDecimales.formatearDecimal(insumoD.getStockActual() + d.getCantidadInsumo(),
-                            3));
+                    insumoD.setStockActual(insumoD.getStockActual().add(d.getCantidadInsumo()));
                     i.setDetalle(insumoD);
                     insumoRepo.save(i);
                     i = null;
@@ -193,16 +194,16 @@ public class OrdenServiceImp implements IOrdenService {
         }
     }
 
-    private void modificarStockInsumos(ProductoManufacturado p, double cantidad) {
+    private void modificarStockInsumos(ProductoManufacturado p, BigDecimal cantidad) {
         ProductoDetalle d;
-        double cantInsumo = 0;
+        BigDecimal cantInsumo = BigDecimal.ZERO;
         for (Insumo i : p.getInsumos()) {
             if (!Objects.isNull(i)) {
                 for (Historial historial : p.getHistorial()) {
                     if (historial.getInsumo().equals(i) && historial.getInsumo().getIdInsumo() == i.getIdInsumo()) {
-                        cantInsumo = (historial.getCantidad() * cantidad);
+                        cantInsumo = (historial.getCantidad().multiply(cantidad));
                         d = i.getDetalle();
-                        d.setStockActual(formateoDecimales.formatearDecimal(d.getStockActual() - cantInsumo, 3));
+                        d.setStockActual(d.getStockActual().subtract(cantInsumo));
                         i.setDetalle(d);
                         insumoRepo.save(i);
                     }
@@ -212,30 +213,30 @@ public class OrdenServiceImp implements IOrdenService {
     }
 
     public SumaOrdenesDTO sumarOrdenes() throws NullPointerException {
-        Double suma = repo.sumaOrdenes();
-        Double balance = repo.calcularBalance();
-        Double ordenesPagas = repo.sumaPagosDeOrdenes();
+        BigDecimal suma = repo.sumaOrdenes();
+        BigDecimal balance = repo.calcularBalance();
+        BigDecimal ordenesPagas = repo.sumaPagosDeOrdenes();
         if (suma != null) {
             SumaOrdenesDTO sumaDTO = new SumaOrdenesDTO();
             sumaDTO.setTotal(suma);
-            sumaDTO.setBalance((balance != null) ? balance : 0);
-            sumaDTO.setPagado((ordenesPagas != null) ? ordenesPagas : 0);
+            sumaDTO.setBalance(balance != null ? balance : BigDecimal.ZERO);
+            sumaDTO.setPagado(ordenesPagas != null ? ordenesPagas : BigDecimal.ZERO);
             return sumaDTO;
         }
         return new SumaOrdenesDTO();
     }
 
     public SumaOrdenesDTO sumarOrdenesPorFecha(LocalDateTime fecha_carga) throws NullPointerException {
-        Double suma = repo.sumaOrdenesPorFecha(fecha_carga);
-        Double balance = repo.calcularBalancePorFecha(fecha_carga);
-        Double ordenesPagas = repo.sumaPagosDeOrdenesPorFecha(fecha_carga);
-        Double pagosEfectivo = repo.sumaPagosEnEfectivoPorFecha(fecha_carga);
+        BigDecimal suma = repo.sumaOrdenesPorFecha(fecha_carga);
+        BigDecimal balance = repo.calcularBalancePorFecha(fecha_carga);
+        BigDecimal ordenesPagas = repo.sumaPagosDeOrdenesPorFecha(fecha_carga);
+        BigDecimal pagosEfectivo = repo.sumaPagosEnEfectivoPorFecha(fecha_carga);
         if (suma != null) {
             SumaOrdenesDTO sumaDTO = new SumaOrdenesDTO();
             sumaDTO.setTotal(suma);
-            sumaDTO.setBalance((balance != null) ? balance : 0);
-            sumaDTO.setPagado((ordenesPagas != null) ? ordenesPagas : 0);
-            sumaDTO.setEfectivo(pagosEfectivo != null ? pagosEfectivo : 0);
+            sumaDTO.setBalance(balance != null ? balance : BigDecimal.ZERO);
+            sumaDTO.setPagado(ordenesPagas != null ? ordenesPagas : BigDecimal.ZERO);
+            sumaDTO.setEfectivo(pagosEfectivo != null ? pagosEfectivo : BigDecimal.ZERO);
             return sumaDTO;
         }
         return new SumaOrdenesDTO();
@@ -250,6 +251,7 @@ public class OrdenServiceImp implements IOrdenService {
 
         return lista;
     }
+
     @Override
     public OrdenClienteProjection obtenerDatosPorCliente(Long idCliente) {
         return repo.findDatosCliente(idCliente, PageRequest.of(0, 1))
@@ -257,4 +259,5 @@ public class OrdenServiceImp implements IOrdenService {
                 .findFirst()
                 .orElse(null);
     }
+
 }

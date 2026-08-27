@@ -21,7 +21,7 @@ public class Insumo {
     private ProductoDetalle detalle;
     @ManyToMany(mappedBy = "insumos")
     private List<ProductoManufacturado> productoManufacturado;
-    private double precio = 0;
+    private BigDecimal precio = BigDecimal.valueOf(0);
     private String denominacion;
     private Boolean esParaElaborar;
     private Boolean eliminado;
@@ -48,7 +48,7 @@ public class Insumo {
         return detalle;
     }
 
-    public double getPrecio() {
+    public BigDecimal getPrecio() {
         return precio;
     }
 
@@ -72,7 +72,7 @@ public class Insumo {
         this.detalle = detalle;
     }
 
-    public void setPrecio(double precio) {
+    public void setPrecio(BigDecimal precio) {
         this.precio = precio;
     }
 

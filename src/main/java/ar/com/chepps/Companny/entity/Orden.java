@@ -4,6 +4,7 @@ import ar.com.chepps.Companny.enums.Estados;
 import ar.com.chepps.Companny.enums.TipoPago;
 import ar.com.chepps.Companny.enums.TipoOrden;
 import jakarta.persistence.*;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -33,12 +34,12 @@ public class Orden {
     private List<OrdenDetalle> detalle;
     private LocalDateTime fecha_carga = LocalDateTime.now();
     private LocalDateTime fecha_entrega;
-    private double subTotal;
-    private double total;
+    private BigDecimal subTotal = BigDecimal.ZERO;
+    private BigDecimal total = BigDecimal.ZERO;
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Estados estado = Estados.parcial_pendiente;
-    private Double pagado;
+    private BigDecimal pagado = BigDecimal.ZERO;
     @Enumerated(EnumType.STRING)
     private TipoOrden tipoOrden = TipoOrden.VENTA;
     @Enumerated(EnumType.STRING)
@@ -76,11 +77,11 @@ public class Orden {
         return fecha_entrega;
     }
 
-    public double getSubTotal() {
+    public BigDecimal getSubTotal() {
         return subTotal;
     }
 
-    public double getTotal() {
+    public BigDecimal getTotal() {
         return total;
     }
 
@@ -108,11 +109,11 @@ public class Orden {
         this.fecha_entrega = fecha_entrega;
     }
 
-    public void setSubTotal(double subTotal) {
+    public void setSubTotal(BigDecimal subTotal) {
         this.subTotal = subTotal;
     }
 
-    public void setTotal(double total) {
+    public void setTotal(BigDecimal total) {
         this.total = total;
     }
 
@@ -132,11 +133,11 @@ public class Orden {
         this.estado = estado;
     }
 
-    public Double getPagado() {
+    public BigDecimal getPagado() {
         return pagado;
     }
 
-    public void setPagado(Double pagado) {
+    public void setPagado(BigDecimal pagado) {
         this.pagado = pagado;
     }
 

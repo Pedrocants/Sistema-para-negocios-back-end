@@ -21,12 +21,12 @@ public class OrdenDetalle {
     @JoinColumn (name = "idProductoInsumo",
     referencedColumnName = "idInsumo")
     private Insumo insumo;
-    private double descuentosPorProducto;
+    private BigDecimal descuentosPorProducto = BigDecimal.ZERO;
     private String observaciones;
-    private double cantidadProducto;
+    private BigDecimal cantidadProducto;
     private BigDecimal precioInsumo;
     private BigDecimal precioProducto;
-    private double cantidadInsumo;
+    private BigDecimal cantidadInsumo;
 
     public OrdenDetalle() {
     }
@@ -43,7 +43,7 @@ public class OrdenDetalle {
         return insumo;
     }
 
-    public double getDescuentosPorProducto() {
+    public BigDecimal getDescuentosPorProducto() {
         return descuentosPorProducto;
     }
 
@@ -59,7 +59,7 @@ public class OrdenDetalle {
         this.insumo = insumo;
     }
 
-    public void setDescuentosPorProducto(double descuentosPorProducto) {
+    public void setDescuentosPorProducto(BigDecimal descuentosPorProducto) {
         this.descuentosPorProducto = descuentosPorProducto;
     }
 
@@ -67,19 +67,19 @@ public class OrdenDetalle {
         this.observaciones = observaciones;
     }
 
-    public double getCantidadProducto() {
+    public BigDecimal getCantidadProducto() {
         return cantidadProducto;
     }
 
-    public void setCantidadProducto(double cantidadProducto) {
+    public void setCantidadProducto(BigDecimal cantidadProducto) {
         this.cantidadProducto = cantidadProducto;
     }
 
-    public double getCantidadInsumo() {
+    public BigDecimal getCantidadInsumo() {
         return cantidadInsumo;
     }
 
-    public void setCantidadInsumo(double cantidadInsumo) {
+    public void setCantidadInsumo(BigDecimal cantidadInsumo) {
         this.cantidadInsumo = cantidadInsumo;
     }
 

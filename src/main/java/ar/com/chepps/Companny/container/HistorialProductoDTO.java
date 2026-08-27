@@ -1,9 +1,11 @@
 package ar.com.chepps.Companny.container;
 
+import java.math.BigDecimal;
+
 public class HistorialProductoDTO {
     private String nombreProducto;
     private String nombreInsumo;
-    private double cantidadInsumo;
+    private BigDecimal cantidadInsumo;
 
     public HistorialProductoDTO() {
     }
@@ -24,11 +26,11 @@ public class HistorialProductoDTO {
         this.nombreInsumo = nombreInsumo;
     }
 
-    public double getCantidadInsumo() {
+    public BigDecimal getCantidadInsumo() {
         return cantidadInsumo;
     }
 
-    public void setCantidadInsumo(double cantidadInsumo) {
+    public void setCantidadInsumo(BigDecimal cantidadInsumo) {
         this.cantidadInsumo = cantidadInsumo;
     }
 

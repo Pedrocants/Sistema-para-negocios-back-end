@@ -7,11 +7,11 @@ public class ProductoDTODetalle {
     //Solo nombre de productos para mostrar
     private String nombre;
     private LocalDateTime tiempo_estimado;
-    private Double precio;
-    private double cantidadProducto;
+    private BigDecimal precio;
+    private BigDecimal cantidadProducto;
     private BigDecimal costo;
 
-    public ProductoDTODetalle(String nombre, LocalDateTime tiempo_estimado, Double precio) {
+    public ProductoDTODetalle(String nombre, LocalDateTime tiempo_estimado, BigDecimal precio) {
         this.nombre = nombre;
         this.tiempo_estimado = tiempo_estimado;
         this.precio = precio;
@@ -33,19 +33,19 @@ public class ProductoDTODetalle {
         this.tiempo_estimado = tiempo_estimado;
     }
 
-    public Double getPrecio() {
+    public BigDecimal getPrecio() {
         return precio;
     }
 
-    public void setPrecio(Double precio) {
+    public void setPrecio(BigDecimal precio) {
         this.precio = precio;
     }
 
-    public double getCantidadProducto() {
+    public BigDecimal getCantidadProducto() {
         return cantidadProducto;
     }
 
-    public void setCantidadProducto(double cantidadProducto) {
+    public void setCantidadProducto(BigDecimal cantidadProducto) {
         this.cantidadProducto = cantidadProducto;
     }
 

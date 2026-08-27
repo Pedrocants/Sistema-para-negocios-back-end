@@ -1,6 +1,7 @@
 package ar.com.chepps.Companny.entity;
 
 import jakarta.persistence.*;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -28,7 +29,7 @@ public class ProductoManufacturado {
     @OneToMany(mappedBy = "producto", cascade = CascadeType.ALL)
     private List<Historial> historial;
     private String denominacion;
-    private double precio = 0;
+    private BigDecimal precio = BigDecimal.ZERO;
     private int cantVendidas;
     private String descripcion;
     private LocalDateTime tiempo_estimado;
@@ -73,11 +74,11 @@ public class ProductoManufacturado {
         this.denominacion = denominacion;
     }
 
-    public double getPrecio() {
+    public BigDecimal getPrecio() {
         return precio;
     }
 
-    public void setPrecio(double precio) {
+    public void setPrecio(BigDecimal precio) {
         this.precio = precio;
     }
 

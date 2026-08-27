@@ -12,6 +12,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -20,13 +21,13 @@ public interface OrdenRepository extends JpaRepository<Orden, Long> {
     @Transactional
     @Query("SELECT SUM(o.total) FROM Orden o " +
             "WHERE o.tipoOrden = 'VENTA'")
-    public Double sumaOrdenes();
+    public BigDecimal sumaOrdenes();
 
     @Transactional
     @Query("SELECT SUM(o.total) FROM Orden o " +
             "WHERE o.tipoOrden = 'VENTA' AND o.fecha_carga >= :fecha_carga AND o.estado != " +
             "Estados.cancelada")
-    public Double sumaOrdenesPorFecha(@Param("fecha_carga") LocalDateTime fecha_carga);
+    public BigDecimal sumaOrdenesPorFecha(@Param("fecha_carga") LocalDateTime fecha_carga);
 
     @Transactional
     @Query("SELECT SUM(CASE WHEN o.tipoOrden = 'VENTA' THEN o.total ELSE 0 END) - " +
@@ -34,15 +35,15 @@ public interface OrdenRepository extends JpaRepository<Orden, Long> {
             "SUM(CASE WHEN o.tipoOrden = 'PAGO' THEN o.total ELSE 0 END) " +
             "FROM Orden o WHERE o.estado != Estados.cancelada AND o.tipoOrden != TipoOrden" +
             ".AGREGACION_DE_STOCK AND tipoOrden != TipoOrden.DEVOLUCION_O_ELIMINACION_DE_STOCK")
-    public Double calcularBalance();
+    public BigDecimal calcularBalance();
 
     @Query("SELECT SUM(o.pagado) FROM Orden o WHERE o.estado != Estados.cancelada")
-    public Double sumaPagosDeOrdenes();
+    public BigDecimal sumaPagosDeOrdenes();
 
     @Query("SELECT SUM(o.pagado) FROM Orden o WHERE o.fecha_carga >= :fecha_carga AND o.estado !=" +
             " Estados.cancelada AND o.tipoOrden != TipoOrden.DEVOLUCION_O_ELIMINACION_DE_STOCK " +
             "AND o.tipoOrden != AGREGACION_DE_STOCK")
-    public Double sumaPagosDeOrdenesPorFecha(@Param("fecha_carga") LocalDateTime fecha_carga);
+    public BigDecimal sumaPagosDeOrdenesPorFecha(@Param("fecha_carga") LocalDateTime fecha_carga);
 
     @Query("SELECT SUM(CASE WHEN o.tipoOrden = TipoOrden.VENTA THEN o.pagado ELSE 0 END) - SUM" +
             "(CASE WHEN o.tipoOrden = TipoOrden.COMPRA THEN o.pagado ELSE 0 END) - SUM(CASE WHEN " +
@@ -59,7 +60,7 @@ public interface OrdenRepository extends JpaRepository<Orden, Long> {
             ".tipoPago" +
             " " +
             "= TipoPago.EFECTIVO AND o.estado != Estados.cancelada")
-    public Double sumaPagosEnEfectivoPorFecha(@Param("fecha_carga") LocalDateTime fecha_carga);
+    public BigDecimal sumaPagosEnEfectivoPorFecha(@Param("fecha_carga") LocalDateTime fecha_carga);
 
     @Transactional
     @Query("SELECT o FROM Orden o WHERE o.fecha_carga >= :fecha_carga AND o.estado != Estados.cancelada")
@@ -91,7 +92,7 @@ public interface OrdenRepository extends JpaRepository<Orden, Long> {
             "SUM(CASE WHEN o.tipoOrden = 'COMPRA' THEN o.total ELSE 0 END) - " +
             "SUM(CASE WHEN o.tipoOrden = 'PAGO' THEN o.total ELSE 0 END) " +
             "FROM Orden o WHERE o.fecha_carga >= :fecha_carga AND o.estado != Estados.cancelada")
-    public Double calcularBalancePorFecha(@Param("fecha_carga") LocalDateTime fecha_carga);
+    public BigDecimal calcularBalancePorFecha(@Param("fecha_carga") LocalDateTime fecha_carga);
 
     @Transactional
     @Query("SELECT new ar.com.chepps.Companny.container.ReportesVentasProductos(" +

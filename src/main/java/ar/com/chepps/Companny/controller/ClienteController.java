@@ -13,7 +13,6 @@ public class ClienteController {
     @Autowired
     private IClienteService clsrv;
 
-    @CrossOrigin(origins = "http://localhost:3000/")
     @GetMapping(value = "/clientes", produces = MediaType.APPLICATION_JSON_VALUE)
     public ArrayList<ClienteDTO> mostrarTodos(){
         return clsrv.mostrarTodos();

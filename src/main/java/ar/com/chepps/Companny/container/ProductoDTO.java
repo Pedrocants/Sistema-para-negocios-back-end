@@ -3,6 +3,7 @@ package ar.com.chepps.Companny.container;
 import ar.com.chepps.Companny.entity.Historial;
 import ar.com.chepps.Companny.entity.ProductoDetalle;
 import ar.com.chepps.Companny.entity.UnidadMedida;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -13,7 +14,7 @@ public class ProductoDTO {
     private List<InsumoDTO> insumos;
     private List<Historial> historial;
     private String denominacion;
-    private double precio = 0;
+    private BigDecimal precio = BigDecimal.ZERO;
     private int cantVendidas;
     private String descripcion;
     private LocalDateTime tiempo_estimado;
@@ -22,7 +23,7 @@ public class ProductoDTO {
     public ProductoDTO() {
     }
 
-    public ProductoDTO(Long idProductoManufacturado, UnidadMedida unidad, ProductoDetalle detalle, List<InsumoDTO> insumos, String denominacion, double precio, int cantVendidas, String descripcion, LocalDateTime tiempo_estimado, boolean eliminado) {
+    public ProductoDTO(Long idProductoManufacturado, UnidadMedida unidad, ProductoDetalle detalle, List<InsumoDTO> insumos, String denominacion, BigDecimal precio, int cantVendidas, String descripcion, LocalDateTime tiempo_estimado, boolean eliminado) {
         this.idProductoManufacturado = idProductoManufacturado;
         this.unidad = unidad;
         this.detalle = detalle;
@@ -75,11 +76,11 @@ public class ProductoDTO {
         this.denominacion = denominacion;
     }
 
-    public double getPrecio() {
+    public BigDecimal getPrecio() {
         return precio;
     }
 
-    public void setPrecio(double precio) {
+    public void setPrecio(BigDecimal precio) {
         this.precio = precio;
     }
 

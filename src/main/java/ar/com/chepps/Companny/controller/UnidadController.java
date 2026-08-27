@@ -16,7 +16,6 @@ public class UnidadController {
     @Autowired
     private IUnidadMedidaService svr;
 
-    @CrossOrigin(origins = "http://localhost:3000/")
     @GetMapping("/unidad/obtenerUnidades")
     @ResponseStatus(HttpStatus.OK)
     public List<UnidadMedida> getUnidades(){

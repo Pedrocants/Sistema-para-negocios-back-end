@@ -97,7 +97,7 @@ public class ExcelReportService implements IExcelReportService {
             estadoCell.setCellStyle(statusStyle);
 
             Cell totalCell = row.createCell(2);
-            totalCell.setCellValue(orden.getTotal());
+            totalCell.setCellValue(orden.getTotal().doubleValue());
             totalCell.setCellStyle(numberStyle);
 
             Cell fechaCargaCell = row.createCell(3);
@@ -112,7 +112,7 @@ public class ExcelReportService implements IExcelReportService {
         totalVentasLabelCell.setCellStyle(dataStyle); // Aplica estilo de datos
 
         Cell totalVentasValueCell = totalVentasRow.createCell(3);
-        totalVentasValueCell.setCellValue(calculos.getTotal());
+        totalVentasValueCell.setCellValue(calculos.getTotal().doubleValue());
         totalVentasValueCell.setCellStyle(numberStyle);
 
         Row totalBalanceRow = sheet.createRow(rowNum++);
@@ -121,7 +121,7 @@ public class ExcelReportService implements IExcelReportService {
         totalBalanceLabelCell.setCellStyle(dataStyle);
 
         Cell totalBalanceValueCell = totalBalanceRow.createCell(3);
-        totalBalanceValueCell.setCellValue(calculos.getBalance());
+        totalBalanceValueCell.setCellValue(calculos.getBalance().doubleValue());
         totalBalanceValueCell.setCellStyle(numberStyle);
 
         Row totalPagosRow = sheet.createRow(rowNum++);
@@ -130,7 +130,7 @@ public class ExcelReportService implements IExcelReportService {
         totalPagosLabelCell.setCellStyle(dataStyle);
 
         Cell totalPagosValueCell = totalPagosRow.createCell(3);
-        totalPagosValueCell.setCellValue(calculos.getPagado());
+        totalPagosValueCell.setCellValue(calculos.getPagado().doubleValue());
         totalPagosValueCell.setCellStyle(numberStyle);
 
         Row totalEfectivo = sheet.createRow(rowNum++);
@@ -139,7 +139,7 @@ public class ExcelReportService implements IExcelReportService {
         totalPagosEfectivoLabel.setCellStyle(dataStyle);
 
         Cell totalPagosEfectivoVal = totalEfectivo.createCell(3);
-        totalPagosEfectivoVal.setCellValue(calculos.getEfectivo());
+        totalPagosEfectivoVal.setCellValue(calculos.getEfectivo().doubleValue());
         totalPagosEfectivoVal.setCellStyle(numberStyle);
 
         for (int i = 0; i < encabezados.length; i++) {
@@ -227,11 +227,11 @@ public class ExcelReportService implements IExcelReportService {
             denominacionCell.setCellStyle(productNameStyle);
 
             Cell stockCell = row.createCell(2);
-            stockCell.setCellValue(r.getStock());
+            stockCell.setCellValue(r.getStock().doubleValue());
             stockCell.setCellStyle(productNameStyle);
 
             Cell cantidadVendidasCell = row.createCell(3);
-            cantidadVendidasCell.setCellValue(r.getCantidadVendidas());
+            cantidadVendidasCell.setCellValue(r.getCantidadVendidas().doubleValue());
             cantidadVendidasCell.setCellStyle(numberStyle);
 
             sheet.autoSizeColumn(0);

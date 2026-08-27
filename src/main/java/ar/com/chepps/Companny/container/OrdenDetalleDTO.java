@@ -2,6 +2,7 @@ package ar.com.chepps.Companny.container;
 
 import ar.com.chepps.Companny.entity.*;
 import ar.com.chepps.Companny.enums.Estados;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -13,23 +14,23 @@ public class OrdenDetalleDTO {
     private Domicilio domicilio;
     private LocalDateTime fecha_carga;
     private LocalDateTime fecha_entrega;
-    private double subTotal;
-    private double total;
+    private BigDecimal subTotal = BigDecimal.ZERO;
+    private BigDecimal total = BigDecimal.ZERO;
     private Estados estado = Estados.parcial_pendiente;
-    private double pagado;
+    private BigDecimal pagado = BigDecimal.ZERO;
     private List<ProductoDTODetalle> productos;
 
     public OrdenDetalleDTO() {
     }
 
-    public OrdenDetalleDTO(Long idOrden, String cliente, Double total, Estados estado) {
+    public OrdenDetalleDTO(Long idOrden, String cliente, BigDecimal total, Estados estado) {
         this.idOrden = idOrden;
         this.cliente = cliente;
-        this.total = (double) total;
+        this.total = total;
         this.estado = estado;
     }
 
-    public OrdenDetalleDTO(Long idOrden, String cliente, Contacto contacto, Domicilio domicilio, LocalDateTime fecha_carga, LocalDateTime fecha_entrega, double subTotal, double total, Estados estado, double pagado) {
+    public OrdenDetalleDTO(Long idOrden, String cliente, Contacto contacto, Domicilio domicilio, LocalDateTime fecha_carga, LocalDateTime fecha_entrega, BigDecimal subTotal, BigDecimal total, Estados estado, BigDecimal pagado) {
         this.idOrden = idOrden;
         this.cliente = cliente;
         this.contacto = contacto;
@@ -90,19 +91,19 @@ public class OrdenDetalleDTO {
         this.fecha_entrega = fecha_entrega;
     }
 
-    public double getSubTotal() {
+    public BigDecimal getSubTotal() {
         return subTotal;
     }
 
-    public void setSubTotal(double subTotal) {
+    public void setSubTotal(BigDecimal subTotal) {
         this.subTotal = subTotal;
     }
 
-    public double getTotal() {
+    public BigDecimal getTotal() {
         return total;
     }
 
-    public void setTotal(double total) {
+    public void setTotal(BigDecimal total) {
         this.total = total;
     }
 
@@ -114,11 +115,11 @@ public class OrdenDetalleDTO {
         this.estado = estado;
     }
 
-    public double getPagado() {
+    public BigDecimal getPagado() {
         return pagado;
     }
 
-    public void setPagado(double pagado) {
+    public void setPagado(BigDecimal pagado) {
         this.pagado = pagado;
     }
 

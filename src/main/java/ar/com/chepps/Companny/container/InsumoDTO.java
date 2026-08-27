@@ -9,7 +9,7 @@ public class InsumoDTO {
     private Long idInsumo;
     private UnidadMedida unidadMedida;
     private ProductoDetalle detalle;
-    private double precio = 0;
+    private BigDecimal precio = BigDecimal.ZERO;
     private String denominacion;
     private Boolean esParaElaborar;
     private Boolean eliminado;
@@ -20,7 +20,7 @@ public class InsumoDTO {
     }
 
     public InsumoDTO(Long idInsumo, UnidadMedida unidadMedida, ProductoDetalle detalle,
-                     double precio, String denominacion) {
+                     BigDecimal precio, String denominacion) {
         this.idInsumo = idInsumo;
         this.unidadMedida = unidadMedida;
         this.detalle = detalle;
@@ -52,11 +52,11 @@ public class InsumoDTO {
         this.detalle = detalle;
     }
 
-    public double getPrecio() {
+    public BigDecimal getPrecio() {
         return precio;
     }
 
-    public void setPrecio(double precio) {
+    public void setPrecio(BigDecimal precio) {
         this.precio = precio;
     }
 
