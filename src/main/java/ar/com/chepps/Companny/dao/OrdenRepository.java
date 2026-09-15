@@ -63,28 +63,33 @@ public interface OrdenRepository extends JpaRepository<Orden, Long> {
     public BigDecimal sumaPagosEnEfectivoPorFecha(@Param("fecha_carga") LocalDateTime fecha_carga);
 
     @Transactional
-    @Query("SELECT o FROM Orden o WHERE o.fecha_carga >= :fecha_carga AND o.estado != Estados.cancelada")
+    @Query("SELECT o FROM Orden o WHERE o.fecha_carga >= :fecha_carga AND o.estado != Estados" +
+            ".cancelada AND o.tipoOrden != ar.com.chepps.Companny.enums.TipoOrden" +
+            ".AGREGACION_DE_STOCK" +
+            " AND o.tipoOrden != ar.com.chepps.Companny.enums.TipoOrden" +
+            ".DEVOLUCION_O_ELIMINACION_DE_STOCK")
     Page<Orden> buscarDesdeUnaFecha(@Param("fecha_carga") LocalDateTime fecha_carga,
                                     Pageable pageable);
 
     @Transactional
-    @Query("SELECT o FROM Orden o WHERE o.estado != Estados.cancelada ORDER BY o.idOrden DESC")
+    @Query("SELECT o FROM Orden o WHERE o.estado != Estados.cancelada AND o.tipoOrden != ar.com" +
+            ".chepps.Companny.enums.TipoOrden.AGREGACION_DE_STOCK\n" +
+            "    AND o.tipoOrden != ar.com.chepps.Companny.enums.TipoOrden" +
+            ".DEVOLUCION_O_ELIMINACION_DE_STOCK ORDER BY o.idOrden DESC")
     Page<Orden> findAll(Pageable pageable);
 
     @Query("""
-    SELECT new ar.com.chepps.Companny.container.OrdenDetalleDTO(
-        o.idOrden,
-        CONCAT(c.nombre, ' ', c.apellido),
-        o.total,
-        o.estado
-    )
-    FROM Orden o
-    LEFT JOIN o.cliente c
-    WHERE o.estado != ar.com.chepps.Companny.enums.Estados.cancelada
-    AND o.tipoOrden != ar.com.chepps.Companny.enums.TipoOrden.AGREGACION_DE_STOCK
-    AND o.tipoOrden != ar.com.chepps.Companny.enums.TipoOrden.DEVOLUCION_O_ELIMINACION_DE_STOCK
-    ORDER BY o.idOrden DESC
-""")
+                SELECT new ar.com.chepps.Companny.container.OrdenDetalleDTO(
+                    o.idOrden,
+                    CONCAT(c.nombre, ' ', c.apellido),
+                    o.total,
+                    o.estado
+                )
+                FROM Orden o
+                LEFT JOIN o.cliente c
+                WHERE o.estado != ar.com.chepps.Companny.enums.Estados.cancelada
+                ORDER BY o.idOrden DESC
+            """)
     Page<OrdenDetalleDTO> findAllResumen(Pageable pageable);
 
     @Transactional
@@ -124,13 +129,13 @@ public interface OrdenRepository extends JpaRepository<Orden, Long> {
             @Param("hasta") LocalDateTime hasta);
 
     @Query("""
-    SELECT 
-        o.contacto.idContacto AS idContacto,
-        o.domicilio.idDomicilio AS idDomicilio
-    FROM Orden o
-    WHERE o.cliente.idCliente = :idCliente
-    ORDER BY o.idOrden DESC
-""")
+                SELECT 
+                    o.contacto.idContacto AS idContacto,
+                    o.domicilio.idDomicilio AS idDomicilio
+                FROM Orden o
+                WHERE o.cliente.idCliente = :idCliente
+                ORDER BY o.idOrden DESC
+            """)
     List<OrdenClienteProjection> findDatosCliente(
             @Param("idCliente") Long idCliente,
             Pageable pageable
