@@ -187,6 +187,13 @@ public class OrdenServiceImp implements IOrdenService {
                     insumoRepo.save(i);
                     i = null;
                     insumoD = null;
+                } else {
+                    throw new IllegalArgumentException("La cantidad de:" + i.getDenominacion() +
+                            " es mayor " +
+                            "al" +
+                            " stock actual!" +
+                            " " +
+                            "Stock: " + i.getDetalle().getStockActual() + " cantidad: " + d.getCantidadInsumo());
                 }
             }
             prd = null;
