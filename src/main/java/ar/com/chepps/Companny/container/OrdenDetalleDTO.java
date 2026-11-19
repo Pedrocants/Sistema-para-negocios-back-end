@@ -2,6 +2,9 @@ package ar.com.chepps.Companny.container;
 
 import ar.com.chepps.Companny.entity.*;
 import ar.com.chepps.Companny.enums.Estados;
+import ar.com.chepps.Companny.enums.TipoOrden;
+import ar.com.chepps.Companny.enums.TipoPago;
+
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -17,6 +20,8 @@ public class OrdenDetalleDTO {
     private BigDecimal subTotal = BigDecimal.ZERO;
     private BigDecimal total = BigDecimal.ZERO;
     private Estados estado = Estados.parcial_pendiente;
+    private TipoOrden tipoOrden;
+    private TipoPago tipoPago;
     private BigDecimal pagado = BigDecimal.ZERO;
     private List<ProductoDTODetalle> productos;
 
@@ -30,7 +35,10 @@ public class OrdenDetalleDTO {
         this.estado = estado;
     }
 
-    public OrdenDetalleDTO(Long idOrden, String cliente, Contacto contacto, Domicilio domicilio, LocalDateTime fecha_carga, LocalDateTime fecha_entrega, BigDecimal subTotal, BigDecimal total, Estados estado, BigDecimal pagado) {
+    public OrdenDetalleDTO(Long idOrden, String cliente, Contacto contacto, Domicilio domicilio,
+                           LocalDateTime fecha_carga, LocalDateTime fecha_entrega,
+                           BigDecimal subTotal, BigDecimal total, Estados estado,
+                           BigDecimal pagado, TipoOrden tipo, TipoPago tpago) {
         this.idOrden = idOrden;
         this.cliente = cliente;
         this.contacto = contacto;
@@ -41,6 +49,8 @@ public class OrdenDetalleDTO {
         this.total = total;
         this.estado = estado;
         this.pagado = pagado;
+        this.tipoOrden = tipo;
+        this.tipoPago = tpago;
     }
 
     public Long getIdOrden() {
@@ -129,5 +139,13 @@ public class OrdenDetalleDTO {
 
     public void setProductos(List<ProductoDTODetalle> productos) {
         this.productos = productos;
+    }
+
+    public TipoOrden getTipoOrden() {
+        return tipoOrden;
+    }
+
+    public TipoPago getTipoPago() {
+        return tipoPago;
     }
 }

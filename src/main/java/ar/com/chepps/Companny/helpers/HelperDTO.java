@@ -91,7 +91,8 @@ public class HelperDTO {
                             orden.getCliente().getNombre() + " " + orden.getCliente().getApellido() : "Cliente local (caja)",
                     orden.getContacto(), orden.getDomicilio(), orden.getFecha_carga(),
                     orden.getFecha_entrega(), orden.getSubTotal(), orden.getTotal(),
-                    orden.getEstado(), orden.getPagado()
+                    orden.getEstado(), orden.getPagado(),
+                    orden.getTipoOrden(), orden.getTipoPago()
             );
             List<OrdenDetalle> detalles = orden.getDetalle();
             List<ProductoDTODetalle> productosParaMostrar = new ArrayList<>();

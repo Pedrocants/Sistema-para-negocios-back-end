@@ -77,7 +77,7 @@ public class ExcelReportService implements IExcelReportService {
         dateStyle.setBorderRight(BorderStyle.THIN);
 
         Row headerRow = sheet.createRow(0);
-        String[] encabezados = {"ID ORDEN", "Estado", "Total", "Fecha de Carga"};
+        String[] encabezados = {"ID ORDEN", "Estado", "Total", "Fecha de Carga", "Tipo", "Pago"};
 
         for (int i = 0; i < encabezados.length; i++) {
             Cell cell = headerRow.createCell(i);
@@ -103,6 +103,14 @@ public class ExcelReportService implements IExcelReportService {
             Cell fechaCargaCell = row.createCell(3);
             fechaCargaCell.setCellValue(orden.getFecha_carga());
             fechaCargaCell.setCellStyle(dateStyle);
+
+            Cell tipoCell = row.createCell(4);
+            tipoCell.setCellValue(orden.getTipoOrden().toString());
+            tipoCell.setCellStyle(dateStyle);
+
+            Cell tpagoCell = row.createCell(5);
+            tpagoCell.setCellValue(orden.getTipoPago().toString());
+            tpagoCell.setCellStyle(dateStyle);
         }
         rowNum++;
 
